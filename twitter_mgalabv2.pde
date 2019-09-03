@@ -73,6 +73,11 @@ void refreshTweets() {
   while (true) {
     getNewTweets();
     println("List refreshed");
+    for(int i = 0 ; i < tweets.size(); i++) {
+      Status status = tweets.get(i);
+      println( i+1 + ": ===========================");
+      println(status.getText());
+    }
     delay(30 * 1000);
   }
 }
