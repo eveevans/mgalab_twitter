@@ -12,6 +12,7 @@ String searchString = "Nicaragua";
 List<Status> tweets;
 
 int count;
+double loopLength;
 
 void setup() {
   size(1920,1080, P3D);
@@ -35,9 +36,8 @@ void setup() {
 
 void draw() {
   background(0,0,0,255);
-
-  // cause twitter return 15 tweets by default
-  if(count >= tweets.size() / 5 ) {
+  
+  if(count > loopLength - 1 ) {
     count = 0;
   }
 
@@ -46,14 +46,16 @@ void draw() {
   textAlign(CENTER, CENTER);
   for(int i = 0 ; i < 3; i++) {
     int current = (count * 3) + i;
-    Status status = tweets.get(current);
-    text(status.getText(), (640 * i) + 40, 0, 640 - 40 * (i+1) , 980);
+    if(current <  tweets.size()) {
+      Status status = tweets.get(current);
+      //text( str(current + 1), (640 * i) + 40, 0, 640 - 40 * (i+1) , 980);
+      text(status.getText(), (640 * i) + 40, 0, 640 - 40 * (i+1) , 980);
+    }
   } 
-
 
   count += 1;
   server.sendScreen();
-  delay(3 * 1000);
+  delay(5 * 1000);
 }
 
 void getNewTweets(){
@@ -62,6 +64,7 @@ void getNewTweets(){
 
     QueryResult result = twitter.search(query);
     tweets = result.getTweets();
+    loopLength = ceil( tweets.size() / 3.0);
   }
   catch (TwitterException te) {
     System.out.println("Failed to search tweets: " + te.getMessage());
